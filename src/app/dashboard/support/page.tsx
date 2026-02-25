@@ -18,11 +18,15 @@ import {
 } from 'lucide-react';
 
 export default function SupportDashboard() {
-    const [tickets, setTickets] = useState([]);
+    // FIXED: Added <any[]> type to prevent "never[]" assignment error
+    const [tickets, setTickets] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedTicket, setSelectedTicket] = useState(null);
+    const [selectedTicket, setSelectedTicket] = useState<any>(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Environment variable for live backend connection
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
 
     useEffect(() => {
         fetchTickets();
@@ -31,7 +35,8 @@ export default function SupportDashboard() {
     const fetchTickets = async () => {
         try {
             const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/support/admin/all', {
+            // UPDATED: Used dynamic backendUrl
+            const response = await fetch(`${backendUrl}/api/support/admin/all`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -50,7 +55,8 @@ export default function SupportDashboard() {
     const handleUpdateStatus = async (id: string, newStatus: string) => {
         try {
             const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/support/admin/${id}`, {
+            // UPDATED: Used dynamic backendUrl
+            const response = await fetch(`${backendUrl}/api/support/admin/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,8 +77,9 @@ export default function SupportDashboard() {
 
     const filteredTickets = tickets.filter(ticket => {
         const matchesStatus = filterStatus === 'All' || ticket.status === filterStatus;
-        const matchesSearch = ticket.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            ticket.userId?.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = 
+            (ticket.subject?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (ticket.userId?.name?.toLowerCase().includes(searchQuery.toLowerCase()));
         return matchesStatus && matchesSearch;
     });
 
@@ -111,7 +118,6 @@ export default function SupportDashboard() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* Ticket List */}
                 <div className="lg:col-span-4 space-y-4">
                     {loading ? (
                         <div className="flex items-center justify-center py-20">
@@ -151,7 +157,6 @@ export default function SupportDashboard() {
                     )}
                 </div>
 
-                {/* Ticket Detail */}
                 <div className="lg:col-span-8">
                     {selectedTicket ? (
                         <motion.div
