@@ -36,7 +36,7 @@ export default function BlogsPage() {
 
     const fetchBlogs = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/blogs`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'https://apex-backend-yugam.vercel.app/api'}/blogs`);
             setBlogs(response.data);
         } catch (error) {
             console.error('Error fetching blogs:', error);
@@ -50,7 +50,7 @@ export default function BlogsPage() {
         setIsSubmitting(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/blogs`, {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'https://apex-backend-yugam.vercel.app/api'}/blogs`, {
                 title,
                 description,
                 content,
@@ -83,7 +83,7 @@ export default function BlogsPage() {
         if (!confirm('Are you sure you want to delete this blog?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/blogs/${id}`, {
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL || 'https://apex-backend-yugam.vercel.app/api'}/blogs/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setBlogs(blogs.filter(b => b._id !== id));

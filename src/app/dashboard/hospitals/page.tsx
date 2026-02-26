@@ -4,7 +4,7 @@ import api from "@/lib/api";
 import { Building, MapPin, Phone, CreditCard, Clock, Trash2, Plus, Edit, X, Search, Star, Filter, Grid3x3, List, Eye } from "lucide-react";
 import Image from "next/image";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://apex-backend-yugam.vercel.app';
 
 type Hospital = {
   _id?: string;

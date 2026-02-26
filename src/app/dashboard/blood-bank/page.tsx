@@ -5,7 +5,7 @@ import { Heart, Activity, Search, MapPin, Droplet, User, Phone, CheckCircle, Ale
 // Removed top-level imports that break SSR
 import { saveAs } from 'file-saver';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://apex-backend-yugam.vercel.app';
 
 export default function BloodBankAdminPage() {
     const [activeTab, setActiveTab] = useState<'donors' | 'requests'>('requests');

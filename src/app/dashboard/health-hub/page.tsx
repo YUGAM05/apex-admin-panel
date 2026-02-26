@@ -27,7 +27,7 @@ export default function HealthHubPage() {
 
     const fetchTips = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/health-hub`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'https://apex-backend-yugam.vercel.app/api'}/health-hub`);
             setTips(response.data);
         } catch (error) {
             console.error('Error fetching tips:', error);
@@ -40,7 +40,7 @@ export default function HealthHubPage() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/health-hub`, {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'https://apex-backend-yugam.vercel.app/api'}/health-hub`, {
                 title,
                 description,
                 imageUrl
@@ -61,7 +61,7 @@ export default function HealthHubPage() {
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this tip?')) return;
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/health-hub/${id}`);
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL || 'https://apex-backend-yugam.vercel.app/api'}/health-hub/${id}`);
             setTips(tips.filter(t => t._id !== id));
         } catch (error) {
             console.error('Error deleting tip:', error);

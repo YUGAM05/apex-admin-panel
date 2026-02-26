@@ -26,7 +26,7 @@ export default function SupportDashboard() {
     const [searchQuery, setSearchQuery] = useState('');
 
     // Environment variable for live backend connection
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://apex-backend-yugam.vercel.app';
 
     useEffect(() => {
         fetchTickets();
@@ -77,7 +77,7 @@ export default function SupportDashboard() {
 
     const filteredTickets = tickets.filter(ticket => {
         const matchesStatus = filterStatus === 'All' || ticket.status === filterStatus;
-        const matchesSearch = 
+        const matchesSearch =
             (ticket.subject?.toLowerCase().includes(searchQuery.toLowerCase())) ||
             (ticket.userId?.name?.toLowerCase().includes(searchQuery.toLowerCase()));
         return matchesStatus && matchesSearch;
@@ -133,14 +133,14 @@ export default function SupportDashboard() {
                                 key={ticket._id}
                                 onClick={() => setSelectedTicket(ticket)}
                                 className={`p-6 rounded-[2rem] border transition-all cursor-pointer ${selectedTicket?._id === ticket._id
-                                        ? "bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-200"
-                                        : "bg-white border-gray-100 hover:border-blue-200"
+                                    ? "bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-200"
+                                    : "bg-white border-gray-100 hover:border-blue-200"
                                     }`}
                             >
                                 <div className="flex justify-between items-start mb-4">
                                     <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-lg ${selectedTicket?._id === ticket._id
-                                            ? "bg-white/20 text-white"
-                                            : ticket.status === 'Open' ? "bg-red-50 text-red-600" : "bg-emerald-50 text-emerald-600"
+                                        ? "bg-white/20 text-white"
+                                        : ticket.status === 'Open' ? "bg-red-50 text-red-600" : "bg-emerald-50 text-emerald-600"
                                         }`}>
                                         {ticket.status}
                                     </span>
