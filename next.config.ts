@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: 'https',
+        hostname: 'apex-backend-theta.vercel.app',
+        pathname: '/uploads/**'
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '5000',
