@@ -4,6 +4,8 @@ import api from "@/lib/api";
 import { Building, MapPin, Phone, CreditCard, Clock, Trash2, Plus, Edit, X, Search, Star, Filter, Grid3x3, List, Eye } from "lucide-react";
 import Image from "next/image";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+
 type Hospital = {
   _id?: string;
   name: string;
@@ -467,7 +469,7 @@ export default function HospitalsAdminPage() {
                         const token = localStorage.getItem('token');
                         const formData = new FormData();
                         Array.from(files).forEach(f => formData.append('images', f));
-                        const res = await fetch('http://localhost:5000/api/hospitals/upload-images', {
+                        const res = await fetch(`${BACKEND_URL}/api/hospitals/upload-images`, {
                           method: 'POST',
                           headers: { Authorization: `Bearer ${token || ''}` },
                           body: formData
@@ -642,7 +644,6 @@ export default function HospitalsAdminPage() {
                       description: "",
                       rating: 0,
                     });
-
                     setUploadedImageUrls([]);
                   }}
                   className="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
@@ -663,15 +664,13 @@ export default function HospitalsAdminPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
+                    className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                   >
                     <Grid3x3 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
+                    className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                   >
                     <List className="w-4 h-4" />
                   </button>
@@ -910,49 +909,24 @@ export default function HospitalsAdminPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Open 24/7?</label>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="edit_isOpen24Hours"
-                          checked={editing.isOpen24Hours === true}
-                          onChange={() => setEditing({ ...editing, isOpen24Hours: true })}
-                          className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                        />
+                        <input type="radio" name="edit_isOpen24Hours" checked={editing.isOpen24Hours === true} onChange={() => setEditing({ ...editing, isOpen24Hours: true })} className="w-4 h-4 text-blue-600 focus:ring-blue-500" />
                         <span className="text-sm text-gray-700">Yes</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="edit_isOpen24Hours"
-                          checked={editing.isOpen24Hours === false}
-                          onChange={() => setEditing({ ...editing, isOpen24Hours: false })}
-                          className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                        />
+                        <input type="radio" name="edit_isOpen24Hours" checked={editing.isOpen24Hours === false} onChange={() => setEditing({ ...editing, isOpen24Hours: false })} className="w-4 h-4 text-blue-600 focus:ring-blue-500" />
                         <span className="text-sm text-gray-700">No</span>
                       </label>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Online Payment Available?</label>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="edit_isOnlinePaymentAvailable"
-                          checked={editing.isOnlinePaymentAvailable === true}
-                          onChange={() => setEditing({ ...editing, isOnlinePaymentAvailable: true })}
-                          className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                        />
+                        <input type="radio" name="edit_isOnlinePaymentAvailable" checked={editing.isOnlinePaymentAvailable === true} onChange={() => setEditing({ ...editing, isOnlinePaymentAvailable: true })} className="w-4 h-4 text-blue-600 focus:ring-blue-500" />
                         <span className="text-sm text-gray-700">Yes</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="edit_isOnlinePaymentAvailable"
-                          checked={editing.isOnlinePaymentAvailable === false}
-                          onChange={() => setEditing({ ...editing, isOnlinePaymentAvailable: false })}
-                          className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                        />
+                        <input type="radio" name="edit_isOnlinePaymentAvailable" checked={editing.isOnlinePaymentAvailable === false} onChange={() => setEditing({ ...editing, isOnlinePaymentAvailable: false })} className="w-4 h-4 text-blue-600 focus:ring-blue-500" />
                         <span className="text-sm text-gray-700">No</span>
                       </label>
                     </div>
@@ -975,21 +949,9 @@ export default function HospitalsAdminPage() {
                         <span className="text-gray-400 text-sm">Select government schemes (Optional)...</span>
                       ) : (
                         editing.governmentSchemes.map((scheme) => (
-                          <span
-                            key={scheme}
-                            className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium flex items-center gap-1"
-                          >
+                          <span key={scheme} className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
                             {scheme}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setEditing(prev => prev ? ({
-                                  ...prev,
-                                  governmentSchemes: prev.governmentSchemes.filter(s => s !== scheme)
-                                }) : null);
-                              }}
-                              className="hover:text-blue-900"
-                            >
+                            <button type="button" onClick={() => { setEditing(prev => prev ? ({ ...prev, governmentSchemes: prev.governmentSchemes.filter(s => s !== scheme) }) : null); }} className="hover:text-blue-900">
                               <X className="w-3 h-3" />
                             </button>
                           </span>
@@ -999,24 +961,15 @@ export default function HospitalsAdminPage() {
                     <div className="mt-2 border border-gray-200 rounded-lg p-3 bg-gray-50 max-h-60 overflow-y-auto">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {GOVERNMENT_SCHEMES.map((scheme) => (
-                          <label
-                            key={scheme}
-                            className="flex items-center gap-2 p-2 hover:bg-white rounded cursor-pointer transition-colors"
-                          >
+                          <label key={scheme} className="flex items-center gap-2 p-2 hover:bg-white rounded cursor-pointer transition-colors">
                             <input
                               type="checkbox"
                               checked={editing.governmentSchemes?.includes(scheme) || false}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  setEditing(prev => prev ? ({
-                                    ...prev,
-                                    governmentSchemes: [...(prev.governmentSchemes || []), scheme]
-                                  }) : null);
+                                  setEditing(prev => prev ? ({ ...prev, governmentSchemes: [...(prev.governmentSchemes || []), scheme] }) : null);
                                 } else {
-                                  setEditing(prev => prev ? ({
-                                    ...prev,
-                                    governmentSchemes: (prev.governmentSchemes || []).filter(s => s !== scheme)
-                                  }) : null);
+                                  setEditing(prev => prev ? ({ ...prev, governmentSchemes: (prev.governmentSchemes || []).filter(s => s !== scheme) }) : null);
                                 }
                               }}
                               className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
@@ -1031,12 +984,8 @@ export default function HospitalsAdminPage() {
               </div>
             </div>
             <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-end gap-3">
-              <button onClick={closeEdit} className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                Cancel
-              </button>
-              <button onClick={saveEdit} className="px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                Save Changes
-              </button>
+              <button onClick={closeEdit} className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">Cancel</button>
+              <button onClick={saveEdit} className="px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">Save Changes</button>
             </div>
           </div>
         </div>
@@ -1080,26 +1029,17 @@ export default function HospitalsAdminPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-sm text-gray-500 mb-1">Location</p>
-                  <p className="font-medium text-gray-900 flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    {selectedHospital.city}
-                  </p>
+                  <p className="font-medium text-gray-900 flex items-center gap-2"><MapPin className="w-4 h-4" />{selectedHospital.city}</p>
                   <p className="text-sm text-gray-600 mt-1">{selectedHospital.address}</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-sm text-gray-500 mb-1">Ambulance</p>
-                  <p className="font-medium text-gray-900 flex items-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    {selectedHospital.ambulanceContact}
-                  </p>
+                  <p className="font-medium text-gray-900 flex items-center gap-2"><Phone className="w-4 h-4" />{selectedHospital.ambulanceContact}</p>
                 </div>
                 {selectedHospital.contactNumber && (
                   <div className="bg-gray-50 rounded-lg p-4">
                     <p className="text-sm text-gray-500 mb-1">Contact Number</p>
-                    <p className="font-medium text-gray-900 flex items-center gap-2">
-                      <Phone className="w-4 h-4" />
-                      {selectedHospital.contactNumber}
-                    </p>
+                    <p className="font-medium text-gray-900 flex items-center gap-2"><Phone className="w-4 h-4" />{selectedHospital.contactNumber}</p>
                   </div>
                 )}
                 <div className="bg-gray-50 rounded-lg p-4">
@@ -1108,10 +1048,7 @@ export default function HospitalsAdminPage() {
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-sm text-gray-500 mb-1">Rating</p>
-                  <p className="font-bold text-2xl text-gray-900 flex items-center gap-2">
-                    {selectedHospital.rating}
-                    <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
-                  </p>
+                  <p className="font-bold text-2xl text-gray-900 flex items-center gap-2">{selectedHospital.rating}<Star className="w-6 h-6 fill-yellow-400 text-yellow-400" /></p>
                 </div>
               </div>
               {selectedHospital.governmentSchemes && selectedHospital.governmentSchemes.length > 0 && (
@@ -1119,9 +1056,7 @@ export default function HospitalsAdminPage() {
                   <p className="text-sm font-medium text-gray-700 mb-2">Government Schemes Accepted</p>
                   <div className="flex flex-wrap gap-2">
                     {selectedHospital.governmentSchemes.map((scheme, idx) => (
-                      <span key={idx} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                        {scheme}
-                      </span>
+                      <span key={idx} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">{scheme}</span>
                     ))}
                   </div>
                 </div>

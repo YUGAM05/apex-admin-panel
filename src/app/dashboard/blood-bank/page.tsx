@@ -5,6 +5,8 @@ import { Heart, Activity, Search, MapPin, Droplet, User, Phone, CheckCircle, Ale
 // Removed top-level imports that break SSR
 import { saveAs } from 'file-saver';
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+
 export default function BloodBankAdminPage() {
     const [activeTab, setActiveTab] = useState<'donors' | 'requests'>('requests');
     const [donors, setDonors] = useState<any[]>([]);
@@ -43,7 +45,7 @@ export default function BloodBankAdminPage() {
     const downloadTemplate = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/blood-bank/admin/import/donors/template', {
+            const response = await fetch(`${BACKEND_URL}/api/blood-bank/admin/import/donors/template`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -107,7 +109,7 @@ export default function BloodBankAdminPage() {
                 ? '/api/blood-bank/admin/export/donors/excel'
                 : '/api/blood-bank/admin/export/requests/excel';
 
-            const response = await fetch(`http://localhost:5000${endpoint}`, {
+            const response = await fetch(`${BACKEND_URL}${endpoint}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -183,10 +185,6 @@ export default function BloodBankAdminPage() {
         }
     };
 
-
-
-
-
     const handleAIVerify = async (id: string) => {
         console.log(`[UI] Starting AI verification for ${id}...`);
         setVerifyingAI(id);
@@ -195,16 +193,12 @@ export default function BloodBankAdminPage() {
             const updatedRequest = response.data;
             console.log(`[UI] Received response:`, updatedRequest);
 
-            // Update the requests list
             setRequests(prev => prev.map(req => req._id === id ? updatedRequest : req));
 
-            // If this request is currently selected, update it too
             if (selectedRequest && selectedRequest._id === id) {
                 console.log(`[UI] Updating selected request state.`);
                 setSelectedRequest(updatedRequest);
             }
-
-            // fetchData(); // Removed to avoid multiple state updates, the local update is sufficient
         } catch (error: any) {
             console.error('[UI] Agent Verification failed:', error);
             alert(error.response?.data?.message || 'Agent Verification failed. Please ensure Ollama is running.');
@@ -347,11 +341,9 @@ export default function BloodBankAdminPage() {
                 </div>
             )}
 
-            {/* Local Agent Verification Details Modal */}
             {selectedRequest && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[70] p-4">
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row h-[85vh]">
-                        {/* Image Preview Side */}
                         <div className="md:w-1/2 bg-gray-900 flex items-center justify-center p-4">
                             {selectedRequest.kycDocumentImage ? (
                                 <img
@@ -367,7 +359,6 @@ export default function BloodBankAdminPage() {
                             )}
                         </div>
 
-                        {/* Details Side */}
                         <div className="md:w-1/2 p-8 flex flex-col overflow-y-auto">
                             <div className="flex justify-between items-start mb-6">
                                 <div>
@@ -441,12 +432,6 @@ export default function BloodBankAdminPage() {
                 </div>
             )}
 
-
-
-
-
-
-            {/* Import Modal */}
             {showImportModal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
